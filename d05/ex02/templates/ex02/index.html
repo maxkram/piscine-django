@@ -1,0 +1,24 @@
+{% extends 'ex02/base.html' %}
+{% load static %}
+
+{% block title %}Ex02: First Form{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'ex02/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Ex02: First Form</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>History</h2>
+    <ul>
+        {% for entry in history %}
+            <li>{{ entry }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

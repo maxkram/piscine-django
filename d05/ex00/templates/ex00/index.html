@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ex00: Markdown Cheatsheet</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        main {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ex00: Markdown Cheatsheet</h1>
+        <p>A comprehensive guide to Markdown syntax</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Overview</h2>
+            <p>This Markdown cheat sheet provides a quick overview of all the Markdown syntax elements. It can’t cover every edge case, so if you need more information about any of these elements, refer to the reference guides for basic syntax and extended syntax.</p>
+        </section>
+
+        <section>
+            <h2>Headings</h2>
+            <p>To create a heading, add number signs (#) in front of a word or phrase. The number of number signs you use should correspond to the heading level.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Markdown</th>
+                        <th>HTML</th>
+                        <th>Rendered Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td># Heading level 1</td>
+                        <td>&lt;h1&gt;Heading level 1&lt;/h1&gt;</td>
+                        <td><h1>Heading level 1</h1></td>
+                    </tr>
+                    <tr>
+                        <td>## Heading level 2</td>
+                        <td>&lt;h2&gt;Heading level 2&lt;/h2&gt;</td>
+                        <td><h2>Heading level 2</h2></td>
+                    </tr>
+                    <tr>
+                        <td>### Heading level 3</td>
+                        <td>&lt;h3&gt;Heading level 3&lt;/h3&gt;</td>
+                        <td><h3>Heading level 3</h3></td>
+                    </tr>
+                    <tr>
+                        <td>#### Heading level 4</td>
+                        <td>&lt;h4&gt;Heading level 4&lt;/h4&gt;</td>
+                        <td><h4>Heading level 4</h4></td>
+                    </tr>
+                    <tr>
+                        <td>##### Heading level 5</td>
+                        <td>&lt;h5&gt;Heading level 5&lt;/h5&gt;</td>
+                        <td><h5>Heading level 5</h5></td>
+                    </tr>
+                    <tr>
+                        <td>###### Heading level 6</td>
+                        <td>&lt;h6&gt;Heading level 6&lt;/h6&gt;</td>
+                        <td><h6>Heading level 6</h6></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Alternate Syntax</h2>
+            <p>Alternatively, on the line below the text, add any number of `=` characters for heading level 1 or `-` characters for heading level 2.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Markdown</th>
+                        <th>HTML</th>
+                        <th>Rendered Output</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Heading level 1<br>===============</td>
+                        <td>&lt;h1&gt;Heading level 1&lt;/h1&gt;</td>
+                        <td><h1>Heading level 1</h1></td>
+                    </tr>
+                    <tr>
+                        <td>Heading level 2<br>---------------</td>
+                        <td>&lt;h2&gt;Heading level 2&lt;/h2&gt;</td>
+                        <td><h2>Heading level 2</h2></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Heading Best Practices</h2>
+            <p>Markdown applications don’t agree on how to handle a missing space between the number signs (#) and the heading name. For compatibility, always put a space between the number signs and the heading name.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>✅ Do this</th>
+                        <th>❌ Don't do this</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td># Here's a Heading</td>
+                        <td>#Here's a Heading</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>42Yerevan &copy; 2025</p>
+    </footer>
+</body>
+</html>

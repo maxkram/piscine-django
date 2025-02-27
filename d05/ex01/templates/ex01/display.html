@@ -1,0 +1,21 @@
+{% extends 'ex01/base.html' %}
+{% load static %}  <!-- Add this line to load the static tag library -->
+
+{% block title %}Ex01: Display Process of a Static Page{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'ex01/style1.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Ex01: Display Process of a Static Page</h1>
+    <p>
+        The process of displaying a static page in Django involves the following steps:
+        <ol>
+            <li>A user sends a request to a specific URL.</li>
+            <li>Django's URL resolver matches the URL to a view function.</li>
+            <li>The view function processes the request and renders a template.</li>
+            <li>The rendered HTML is sent back to the user's browser as a response.</li>
+        </ol>
+    </p>
+{% endblock %}
