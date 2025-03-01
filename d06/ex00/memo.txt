@@ -1,0 +1,9 @@
+python3 -m venv venv
+source venv/bin/activate
+pip install django
+http://127.0.0.1:8000/ex00/init/
+psql -U djangouser -d djangotraining
+\dt ex00_schema.*
+\d ex00_schema.ex00_movies
+SELECT * FROM ex00_schema.ex00_movies;
+\q
