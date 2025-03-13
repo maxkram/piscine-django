@@ -1,0 +1,368 @@
+Update the system
+sudo apt update && sudo apt upgrade -y
+
+Install Python 3
+sudo apt install python3 python3-pip python3-venv -y
+
+Install PostgreSQL
+sudo apt install postgresql postgresql-contrib -y
+
+Install Git
+sudo apt install git -y
+
+Install psycopg2 dependencies
+sudo apt install libpq-dev python3-dev -y
+
+1.3 Configure PostgreSQL
+
+Start PostgreSQL
+sudo service postgresql start
+
+Create the database and user
+Switch to the postgres user:
+sudo -u postgres psql
+
+Run these SQL commands:
+CREATE DATABASE djangotraining;
+CREATE USER djangouser WITH PASSWORD 'secret';
+GRANT ALL PRIVILEGES ON DATABASE djangotraining TO djangouser;
+\q
+
+1.4 Set Up Your Project Directory
+
+Create a working directory:
+mkdir ~/django_training
+cd ~/django_training
+
+Set up a virtual environment:
+python3 -m venv venv
+source venv/bin/activate
+
+Install Django and psycopg2:
+pip install django psycopg2-binary
+
+Link to Shared Folder:
+ln -s /mnt/shared ~/django_training/shared
+
+Step 2: Create the Django Project
+Create the Django project:
+django-admin startproject d42
+cd d42
+
+Configure the Database:
+Edit d42/settings.py:
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'djangotraining',
+        'USER': 'djangouser',
+        'PASSWORD': 'secret',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+
+Set up URLs:
+Edit d42/urls.py:
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('ex00.urls')),
+    # Add more includes for other exercises later
+]
+
+Step 3: Implement Exercises
+Exercise 00: SQL - Building a Table
+Create the app:
+
+python manage.py startapp ex00
+
+Create ex00/urls.py:
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('init', views.init, name='init'),
+]
+
+Edit ex00/views.py:
+from django.http import HttpResponse
+import psycopg2
+from psycopg2 import Error
+
+def init(request):
+    try:
+        conn = psycopg2.connect(
+            dbname="djangotraining",
+            user="djangouser",
+            password="secret",
+            host="localhost"
+        )
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS ex00_movies (
+                title VARCHAR(64) UNIQUE NOT NULL,
+                episode_nb INTEGER PRIMARY KEY,
+                opening_crawl TEXT,
+                director VARCHAR(32) NOT NULL,
+                producer VARCHAR(128) NOT NULL,
+                release_date DATE NOT NULL
+            );
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
+        return HttpResponse("OK")
+    except Error as e:
+        return HttpResponse(f"Error: {str(e)}")
+
+Update d42/urls.py:
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('ex00/', include('ex00.urls')),
+]
+
+Test:
+python manage.py runserver
+
+Visit 127.0.0.1:8000/ex00/init in a browser.
+
+Exercise 01: ORM - Building a Table
+Create the app:
+python manage.py startapp ex01
+
+Edit ex01/models.py:
+from django.db import models
+
+class Movies(models.Model):
+    title = models.CharField(max_length=64, unique=True, null=False)
+    episode_nb = models.IntegerField(primary_key=True)
+    opening_crawl = models.TextField(null=True)
+    director = models.CharField(max_length=32, null=False)
+    producer = models.CharField(max_length=128, null=False)
+    release_date = models.DateField(null=False)
+
+    def __str__(self):
+        return self.title
+
+Register the app:
+In d42/settings.py, add 'ex01' to INSTALLED_APPS.
+Note: No migrations are allowed per the rules, so this is just the model setup.
+
+Exercise 02: SQL - Data Insertion
+Create the app:
+
+python manage.py startapp ex02
+
+Create ex02/urls.py:
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('init', views.init, name='init'),
+    path('populate', views.populate, name='populate'),
+    path('display', views.display, name='display'),
+]
+
+Edit ex02/views.py:
+from django.http import HttpResponse
+import psycopg2
+from psycopg2 import Error
+
+def init(request):
+    try:
+        conn = psycopg2.connect(dbname="djangotraining", user="djangouser", password="secret", host="localhost")
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS ex02_movies (
+                title VARCHAR(64) UNIQUE NOT NULL,
+                episode_nb INTEGER PRIMARY KEY,
+                opening_crawl TEXT,
+                director VARCHAR(32) NOT NULL,
+                producer VARCHAR(128) NOT NULL,
+                release_date DATE NOT NULL
+            );
+        """)
+        conn.commit()
+        return HttpResponse("OK")
+    except Error as e:
+        return HttpResponse(f"Error: {str(e)}")
+    finally:
+        cur.close()
+        conn.close()
+
+def populate(request):
+    movies = [
+        (1, "The Phantom Menace", "George Lucas", "Rick McCallum", "1999-05-19"),
+        (2, "Attack of the Clones", "George Lucas", "Rick McCallum", "2002-05-16"),
+        (3, "Revenge of the Sith", "George Lucas", "Rick McCallum", "2005-05-19"),
+        (4, "A New Hope", "George Lucas", "Gary Kurtz, Rick McCallum", "1977-05-25"),
+        (5, "The Empire Strikes Back", "Irvin Kershner", "Gary Kurtz, Rick McCallum", "1980-05-17"),
+        (6, "Return of the Jedi", "Richard Marquand", "Howard G. Kazanjian, George Lucas, Rick McCallum", "1983-05-25"),
+        (7, "The Force Awakens", "J. J. Abrams", "Kathleen Kennedy, J. J. Abrams, Bryan Burk", "2015-12-11"),
+    ]
+    try:
+        conn = psycopg2.connect(dbname="djangotraining", user="djangouser", password="secret", host="localhost")
+        cur = conn.cursor()
+        results = []
+        for episode_nb, title, director, producer, release_date in movies:
+            try:
+                cur.execute("""
+                    INSERT INTO ex02_movies (episode_nb, title, director, producer, release_date)
+                    VALUES (%s, %s, %s, %s, %s)
+                    ON CONFLICT DO NOTHING;
+                """, (episode_nb, title, director, producer, release_date))
+                results.append("OK")
+            except Error as e:
+                results.append(f"Error: {str(e)}")
+        conn.commit()
+        return HttpResponse("<br>".join(results))
+    except Error as e:
+        return HttpResponse(f"Error: {str(e)}")
+    finally:
+        cur.close()
+        conn.close()
+
+def display(request):
+    try:
+        conn = psycopg2.connect(dbname="djangotraining", user="djangouser", password="secret", host="localhost")
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM ex02_movies;")
+        rows = cur.fetchall()
+        if not rows:
+            return HttpResponse("No data available")
+        html = "<table border='1'><tr><th>Title</th><th>Episode</th><th>Opening Crawl</th><th>Director</th><th>Producer</th><th>Release Date</th></tr>"
+        for row in rows:
+            html += f"<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2] or ''}</td><td>{row[3]}</td><td>{row[4]}</td><td>{row[5]}</td></tr>"
+        html += "</table>"
+        return HttpResponse(html)
+    except Error as e:
+        return HttpResponse("No data available")
+    finally:
+        cur.close()
+        conn.close()
+
+Update d42/urls.py:
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('ex00/', include('ex00.urls')),
+    path('ex02/', include('ex02.urls')),
+]
+
+Exercise 03: ORM - Data Insertion
+Create the app:
+python manage.py startapp ex03
+
+Edit ex03/models.py:
+from django.db import models
+
+class Movies(models.Model):
+    title = models.CharField(max_length=64, unique=True, null=False)
+    episode_nb = models.IntegerField(primary_key=True)
+    opening_crawl = models.TextField(null=True)
+    director = models.CharField(max_length=32, null=False)
+    producer = models.CharField(max_length=128, null=False)
+    release_date = models.DateField(null=False)
+
+    def __str__(self):
+        return self.title
+
+Create ex03/urls.py:
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('populate', views.populate, name='populate'),
+    path('display', views.display, name='display'),
+]
+
+Edit ex03/views.py:
+from django.http import HttpResponse
+from .models import Movies
+from django.utils.dateparse import parse_date
+
+def populate(request):
+    movies = [
+        (1, "The Phantom Menace", "George Lucas", "Rick McCallum", "1999-05-19"),
+        (2, "Attack of the Clones", "George Lucas", "Rick McCallum", "2002-05-16"),
+        (3, "Revenge of the Sith", "George Lucas", "Rick McCallum", "2005-05-19"),
+        (4, "A New Hope", "George Lucas", "Gary Kurtz, Rick McCallum", "1977-05-25"),
+        (5, "The Empire Strikes Back", "Irvin Kershner", "Gary Kurtz, Rick McCallum", "1980-05-17"),
+        (6, "Return of the Jedi", "Richard Marquand", "Howard G. Kazanjian, George Lucas, Rick McCallum", "1983-05-25"),
+        (7, "The Force Awakens", "J. J. Abrams", "Kathleen Kennedy, J. J. Abrams, Bryan Burk", "2015-12-11"),
+    ]
+    results = []
+    for episode_nb, title, director, producer, release_date in movies:
+        try:
+            Movies.objects.get_or_create(
+                episode_nb=episode_nb,
+                defaults={
+                    'title': title,
+                    'director': director,
+                    'producer': producer,
+                    'release_date': parse_date(release_date),
+                }
+            )
+            results.append("OK")
+        except Exception as e:
+            results.append(f"Error: {str(e)}")
+    return HttpResponse("<br>".join(results))
+
+def display(request):
+    movies = Movies.objects.all()
+    if not movies:
+        return HttpResponse("No data available")
+    html = "<table border='1'><tr><th>Title</th><th>Episode</th><th>Opening Crawl</th><th>Director</th><th>Producer</th><th>Release Date</th></tr>"
+    for movie in movies:
+        html += f"<tr><td>{movie.title}</td><td>{movie.episode_nb}</td><td>{movie.opening_crawl or ''}</td><td>{movie.director}</td><td>{movie.producer}</td><td>{movie.release_date}</td></tr>"
+    html += "</table>"
+    return HttpResponse(html)
+
+Register the app:
+Add 'ex03' to INSTALLED_APPS in d42/settings.py.
+
+Update d42/urls.py:
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('ex00/', include('ex00.urls')),
+    path('ex02/', include('ex02.urls')),
+    path('ex03/', include('ex03.urls')),
+]
+
+Step 4: Continue with Remaining Exercises
+For brevity, I'll outline the remaining exercises briefly. Follow the same pattern: create an app, set up URLs, and implement views/models as specified. Let me know if you need detailed code for any specific exercise!
+
+Exercise 04: SQL - Data Deleting
+App: ex04
+Views: init, populate, display, remove
+Use SQL with psycopg2 to create ex04_movies, populate it, display it, and delete entries via a form.
+Exercise 05: ORM - Data Deleting
+App: ex05
+Model: Same as ex01
+Views: populate, display, remove
+Use Django ORM for CRUD operations.
+Exercise 06: SQL - Updating Data
+App: ex06
+Views: init, populate, display, update
+Add created and updated fields with a trigger in SQL.
+Exercise 07: ORM - Updating Data
+App: ex07
+Model: Same as ex01 with created and updated
+Views: populate, display, update
+Exercise 08: SQL - Foreign Key
+App: ex08
+Views: init, populate, display
+Create ex08_planets and ex08_people tables with a foreign key.
+Exercise 09: ORM - Foreign Key
+App: ex09
+Models: Planets, People
+View: display
+Exercise 10: ORM - Many to Many
+App: ex10
+Models: Planets, People, Movies with a ManyToMany field
+View: Form-based search and display
+
