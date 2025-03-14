@@ -1,5 +1,5 @@
 """
-URL configuration for d06 project.
+URL configuration for d07 project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -15,17 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from ex00 import views
+from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ex00/', include('ex00.urls')),
-    path('ex02/', include('ex02.urls')),
-    path('ex03/', include('ex03.urls')),
-    path('ex04/', include('ex04.urls')),
-    path('ex05/', include('ex05.urls')),
-    path('ex06/', include('ex06.urls')),
-    path('ex07/', include('ex07.urls')),
-    path('ex08/', include('ex08.urls')),
-    # path('ex09/', include('ex09.urls')),
+    path('', include('ex00.urls')),
 ]
