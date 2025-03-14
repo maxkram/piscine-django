@@ -333,6 +333,9 @@ urlpatterns = [
     path('ex03/', include('ex03.urls')),
 ]
 
+python manage.py makemigrations
+python manage.py migrate
+
 Step 4: Continue with Remaining Exercises
 For brevity, I'll outline the remaining exercises briefly. Follow the same pattern: create an app, set up URLs, and implement views/models as specified. Let me know if you need detailed code for any specific exercise!
 
