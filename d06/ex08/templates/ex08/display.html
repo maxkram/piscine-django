@@ -1,27 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Characters and Planets</title>
-</head>
-<body>
-    <h1>Characters and Their Homeworlds</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Character Name</th>
-                <th>Homeworld</th>
-                <th>Climate</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in data %}
-            <tr>
-                <td>{{ row.0 }}</td>
-                <td>{{ row.1 }}</td>
-                <td>{{ row.2 }}</td>
-            </tr>
+{% extends "base.html" %}
+
+{% block title %}Results{% endblock title %}
+
+{% block content %}
+{% if people|length == 0  %}
+    <h1>No data available</h1>
+    {% else %}
+    <table>
+        <tr>
+            {% for header in headers %}
+            <th>
+                {{ header }}
+            </th>
             {% endfor %}
-        </tbody>
+        </tr>
+        {% for person in people %}
+        <tr>
+            {% for p in person %}
+            <td>
+                {{ p }}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
     </table>
-</body>
-</html>
+{% endif %}
+{% endblock content %}
