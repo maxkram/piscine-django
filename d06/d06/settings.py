@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'ex06',
     'ex07',
     'ex08',
+    'ex09',
 ]
 
 MIDDLEWARE = [
@@ -122,7 +123,8 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+# USE_TZ = True #doesnt work with ex09
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
