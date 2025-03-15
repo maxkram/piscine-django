@@ -1,0 +1,20 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Life Pro Tips</title>
+    {% bootstrap_css %}
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <span class="navbar-text">Hello {{ user_name }}!</span>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Welcome to Life Pro Tips</h1>
+        <p>This is where you'll share your wisdom!</p>
+    </div>
+    {% bootstrap_javascript %}
+</body>
+</html>

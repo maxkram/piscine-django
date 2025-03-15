@@ -41,8 +41,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_bootstrap5',
     'ex00',
+    # 'ex01',
 ]
+
+RANDOM_NAMES = [
+    "Alex", "Blake", "Casey", "Drew", "Ellis",
+    "Finn", "Gray", "Harper", "Indigo", "Jordan"
+]
+NAME_EXPIRY_SECONDS = 42
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,7 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-     'ex00.middleware.AnonymousSessionMiddleware',
+    #  'ex00.middleware.AnonymousSessionMiddleware',
 ]
 
 ROOT_URLCONF = 'd07.urls'
