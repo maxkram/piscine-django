@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'ex06',
     'ex07',
     'ex08',
-    # 'ex09',
+    'ex09',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +65,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
+        # 'DIRS': [BASE_DIR / 'templates'],  # Add this line
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

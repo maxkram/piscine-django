@@ -1,5 +1,5 @@
 """
-WSGI config for d07 project.
+WSGI config for lifeprotips project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'd07.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lifeprotips.settings')
 
 application = get_wsgi_application()
