@@ -3,6 +3,7 @@ psql -U djangouser -d djangotraining
 python manage.py migrate ex09 zero --fake                                                               
 python manage.py migrate ex09
 python manage.py loaddata ex09_initial_data.json
+python manage.py loaddata ex10_initial_data.json
 
 SELECT * FROM django_migrations WHERE app = 'ex09';
 

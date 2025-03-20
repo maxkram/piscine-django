@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Characters from Windy Planets</title>
+</head>
+<body>
+    {% if people_planets %}
+        <table border="1">
+            <tr>
+                <th>Character</th>
+                <th>Planet</th>
+                <th>Climate</th>
+            </tr>
+            {% for entry in people_planets %}
+                <tr>
+                    <td>{{ entry.character }}</td>
+                    <td>{{ entry.planet }}</td>
+                    <td>{{ entry.climate }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No data available, please use the following command line before use: python manage.py loaddata ex10_initial_data.json</p>
+    {% endif %}
+</body>
+</html>
