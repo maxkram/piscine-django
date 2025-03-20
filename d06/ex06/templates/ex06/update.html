@@ -1,25 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Movie</title>
 </head>
 <body>
-    <h1>Update Movie</h1>
-    <form method="post">
-        {% csrf_token %}
-        <label for="title">Select a movie to update:</label>
-        <select name="title" id="title">
-            {% for movie in movies %}
-                <option value="{{ movie.0 }}">{{ movie.0 }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label for="opening_crawl">New Opening Crawl:</label>
-        <textarea name="opening_crawl" id="opening_crawl" rows="5" cols="40"></textarea>
-        <br>
-        <button type="submit">Update</button>
-    </form>
+    {% if titles %}
+        <form method="post">
+            {% csrf_token %}
+            <select name="title">
+                {% for title in titles %}
+                    <option value="{{ title }}">{{ title }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <textarea name="opening_crawl" rows="5" cols="50" placeholder="Enter opening crawl text"></textarea>
+            <br><br>
+            <input type="submit" value="Update">
+        </form>
+    {% else %}
+        <p>No data available</p>
+    {% endif %}
 </body>
 </html>
