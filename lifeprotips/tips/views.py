@@ -1,47 +1,59 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout, authenticate
-from .forms import RegistrationForm, LoginForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User  # Add this import
 from django.conf import settings
 import random
-import time
+from datetime import datetime, timedelta
+from .forms import RegistrationForm, LoginForm
+
+def home(request):
+    if not request.user.is_authenticated:
+        if 'username' not in request.session or 'name_time' not in request.session or \
+           datetime.now() > datetime.fromisoformat(request.session['name_time']) + timedelta(seconds=42):
+            request.session['username'] = random.choice(settings.RANDOM_NAMES)
+            request.session['name_time'] = datetime.now().isoformat()
+        username = request.session['username']
+    else:
+        username = request.user.username
+    return render(request, 'tips/home.html', {'username': username})
 
 def register(request):
     if request.user.is_authenticated:
         return redirect('home')
+    
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = User.objects.create_user(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password']
+            )
+            user.save()
             login(request, user)
             return redirect('home')
     else:
         form = RegistrationForm()
     return render(request, 'tips/register.html', {'form': form})
 
-def login_view(request):
+def user_login(request):
     if request.user.is_authenticated:
         return redirect('home')
+    
     if request.method == 'POST':
-        form = LoginForm(data=request.POST)
+        form = LoginForm(request.POST)
         if form.is_valid():
-            user = form.user
-            login(request, user)
-            return redirect('home')
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                form.add_error(None, "Invalid username or password.")
     else:
         form = LoginForm()
     return render(request, 'tips/login.html', {'form': form})
 
-def logout_view(request):
+def user_logout(request):
     logout(request)
     return redirect('home')
-
-def home(request):
-    if request.user.is_authenticated:
-        username = request.user.username
-    elif not request.session.get('username') or time.time() > request.session.get('expiry', 0):
-        request.session['username'] = random.choice(settings.RANDOM_NAMES)
-        request.session['expiry'] = time.time() + 42
-        username = request.session['username']
-    else:
-        username = request.session['username']
-    return render(request, 'tips/home.html', {'username': username})

@@ -1,0 +1,2 @@
+Django==4.2  # LTS version as of early 2025
+django-bootstrap5  # Optional for styling

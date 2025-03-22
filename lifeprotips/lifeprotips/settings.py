@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t0((5xt074w_f1r$y#a_ak#1wzgdro*93j9s8x974a+engdjnx'
+SECRET_KEY = 'django-insecure-denf4trp0!+^qxh60cx)3l%z=$6(mfpr@(as(=e!4mb9a^wzwj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_bootstrap5',
     'tips',
 ]
 
@@ -124,10 +123,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-RANDOM_NAMES = [
-    "Alice", "Bob", "Charlie", "Diana", "Eve",
-    "Frank", "Grace", "Hank", "Ivy", "Jack"
-]
-
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+RANDOM_NAMES = ['Alice', 'Bob', 'Charlie', 'Diana', 'Eve', 'Frank', 'Grace', 'Hank', 'Ivy', 'Jack']
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
