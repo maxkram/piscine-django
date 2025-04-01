@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Life Pro Tips</title>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}">Life Pro Tips</a> |
+        {% if user.is_authenticated %}
+            Hello {{ username }}! | 
+            <a href="{% url 'logout' %}">Log Out</a>
+        {% else %}
+            Hello {{ username }}! | 
+            <a href="{% url 'register' %}">Register</a> |
+            <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
+    </nav>
+    <h1>Welcome to Life Pro Tips</h1>
+</body>
+</html>

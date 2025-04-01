@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Life Pro Tips</title>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}">Life Pro Tips</a> |
+        {% if user.is_authenticated %}
+            Hello {{ username }}! | 
+            <a href="{% url 'logout' %}">Log Out</a>
+        {% else %}
+            Hello {{ username }}! | 
+            <a href="{% url 'register' %}">Register</a> |
+            <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
+    </nav>
+    <h1>Welcome to Life Pro Tips</h1>
+
+    {% if user.is_authenticated %}
+        <h2>Share a Tip</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Post Tip</button>
+        </form>
+    {% endif %}
+
+    <h2>All Tips</h2>
+    {% if tips %}
+        <ul>
+        {% for tip in tips %}
+            <li>
+                <strong>{{ tip.content }}</strong><br>
+                by {{ tip.author.username }} on {{ tip.date }}<br>
+                Upvotes: {{ tip.upvote_count }} | Downvotes: {{ tip.downvote_count }}<br>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'upvote_tip' tip.id %}">
+                        {% if user in tip.upvotes.all %}Undo Upvote{% else %}Upvote{% endif %}
+                    </a> |
+                    <a href="{% url 'downvote_tip' tip.id %}">
+                        {% if user in tip.downvotes.all %}Undo Downvote{% else %}Downvote{% endif %}
+                    </a> |
+                    {% if user == tip.author or perms.tips.can_delete_tips %}
+                        <a href="{% url 'delete_tip' tip.id %}">Delete</a>
+                    {% else %}
+                        <span>Delete</span>
+                    {% endif %}
+                {% else %}
+                    <span>Upvote</span> | <span>Downvote</span> | <span>Delete</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tips yet. Be the first to share one!</p>
+    {% endif %}
+</body>
+</html>

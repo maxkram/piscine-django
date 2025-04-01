@@ -1,0 +1,10 @@
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser (e.g., username: admin, password: admin123)
+python manage.py runserver
+http://127.0.0.1:8000/admin/ (e.g., admin/admin123)
+Assign Permissions:
+    In the admin interface:
+        Go to Users > Select user1 > Under “Permissions,” find tips | tip | Can delete any tip and check it > Save.
+        Leave user2 without this permission.
+pip freeze > requirements.txt
