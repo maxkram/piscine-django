@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <nav>
     <a href="{% url 'index' %}">Life Pro Tips</a>
     {% if user.is_authenticated %}
@@ -11,6 +12,7 @@
     {% endif %}
     | Hello {{ username }} ({{ user.reputation }})
 </nav>
+
 {% for tip in tips %}
     <p>
         {{ tip.content }} by {{ tip.author }} ({{ tip.author.reputation }}) on {{ tip.date }} 
@@ -22,8 +24,8 @@
             <a href="{% url 'vote' tip.id 'downvote' %}">
                 {% if user_votes.tip.id == 'downvote' %}Undownvote{% else %}Downvote{% endif %}
             </a>
-            {% if tip.author == user or user.has_perm 'myapp.delete_tip' %}
-                <a href="{% url 'delete_tip' tip.id %}">Delete</a>
+            {% if tip.author == user or user.has_perm 'myapp.can_delete_tip' %}
+                <a href="{% url 'can_delete_tip' tip.id %}">Delete</a>
             {% endif %}
         {% endif %}
     </p>

@@ -10,5 +10,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('create_tip/', views.create_tip, name='create_tip'),
     path('vote/<int:tip_id>/<str:vote_type>/', views.vote, name='vote'),
-    path('delete_tip/<int:tip_id>/', views.delete_tip, name='delete_tip'),
+    path('can_delete_tip/<int:tip_id>/', views.can_delete_tip, name='can_delete_tip'),
 ]

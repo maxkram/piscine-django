@@ -76,9 +76,9 @@ def vote(request, tip_id, vote_type):
     return redirect('index')
 
 @login_required
-def delete_tip(request, tip_id):
+def can_delete_tip(request, tip_id):
     tip = get_object_or_404(Tip, id=tip_id)
-    if tip.author == request.user or request.user.has_perm('myapp.delete_tip'):
+    if tip.author == request.user or request.user.has_perm('myapp.can_delete_tip'):
         tip.delete()
     else:
         raise PermissionDenied("You don't have permission to delete this tip.")

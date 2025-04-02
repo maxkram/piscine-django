@@ -26,7 +26,7 @@ def update_reputation_on_vote_delete(sender, instance, **kwargs):
 @receiver(post_save, sender=CustomUser)
 def update_permissions(sender, instance, **kwargs):
     downvote_perm = Permission.objects.get(codename='downvote_tip')
-    delete_perm = Permission.objects.get(codename='delete_tip')
+    delete_perm = Permission.objects.get(codename='can_delete_tip')
     if instance.reputation >= 15:
         instance.user_permissions.add(downvote_perm)
     else:
