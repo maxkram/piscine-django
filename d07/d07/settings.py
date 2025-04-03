@@ -88,3 +88,7 @@ ANONYMOUS_NAMES = [
     'Hakob', 'Roza', 'Ashot', 'Anahit', 'Suren',
     'Seda', 'Levon', 'Gohar', 'Hasmik', 'Grigor'
 ]
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

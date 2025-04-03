@@ -1,13 +1,54 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Life Pro Tips</title>
-    <meta http-equiv="refresh" content="42">
+    <head>
+        <title>Life Pro Tips</title>
+        <meta http-equiv="refresh" content="42">
 </head>
 <body>
     <nav>
-        <p>Hello {{ username }}!</p>
+        <a href="{% url 'home' %}">Life Pro Tips</a>
+        {% if user.is_authenticated %}
+            <p>Hello {{ username }}!</p>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <p>Hello {{ username }}!</p>
+            <a href="{% url 'register' %}">Register</a>
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
     </nav>
     <h1>Welcome to Life Pro Tips</h1>
+    
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Post Tip</button>
+        </form>
+    {% endif %}
+    
+    <h2>Tips</h2>
+    {% for tip in tips %}
+        <div>
+            <p>{{ tip.content }}</p>
+            <small>Posted by {{ tip.author.username }} on {{ tip.created_at }}</small>
+            {% if user.is_authenticated %}
+                <div>
+                    <a href="{% url 'upvote_tip' tip.id %}">Upvote ({{ tip.get_upvote_count }})</a>
+                    <a href="{% url 'downvote_tip' tip.id %}">Downvote ({{ tip.get_downvote_count }})</a>
+                    {% if user == tip.author or perms.tips.can_delete_tips %}
+                        <a href="{% url 'delete_tip' tip.id %}">Delete</a>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div>
+                    <span>Upvotes: {{ tip.get_upvote_count }}</span>
+                    <span>Downvotes: {{ tip.get_downvote_count }}</span>
+                </div>
+            {% endif %}
+            <hr>
+        </div>
+    {% empty %}
+        <p>No tips yet!</p>
+    {% endfor %}
 </body>
 </html>
