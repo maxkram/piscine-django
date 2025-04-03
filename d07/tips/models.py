@@ -20,4 +20,5 @@ class Tip(models.Model):
     class Meta:
         permissions = [
             ("can_delete_tips", "Can delete any tip"),
+            ("can_downvote_tips", "Can downvote any tip"),
         ]

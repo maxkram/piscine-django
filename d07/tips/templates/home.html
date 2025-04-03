@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Life Pro Tips</title>
-        <meta http-equiv="refresh" content="42">
+<head>
+    <title>Life Pro Tips</title>
 </head>
 <body>
     <nav>
@@ -34,7 +33,11 @@
             {% if user.is_authenticated %}
                 <div>
                     <a href="{% url 'upvote_tip' tip.id %}">Upvote ({{ tip.get_upvote_count }})</a>
-                    <a href="{% url 'downvote_tip' tip.id %}">Downvote ({{ tip.get_downvote_count }})</a>
+                    {% if user == tip.author or perms.tips.can_downvote_tips %}
+                        <a href="{% url 'downvote_tip' tip.id %}">Downvote ({{ tip.get_downvote_count }})</a>
+                    {% else %}
+                        <span>Downvotes: {{ tip.get_downvote_count }}</span>
+                    {% endif %}
                     {% if user == tip.author or perms.tips.can_delete_tips %}
                         <a href="{% url 'delete_tip' tip.id %}">Delete</a>
                     {% endif %}

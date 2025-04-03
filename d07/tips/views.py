@@ -47,18 +47,19 @@ def upvote_tip(request, tip_id):
 @login_required
 def downvote_tip(request, tip_id):
     tip = Tip.objects.get(id=tip_id)
-    if request.user in tip.upvotes.all():
-        tip.upvotes.remove(request.user)
-    if request.user in tip.downvotes.all():
-        tip.downvotes.remove(request.user)
-    else:
-        tip.downvotes.add(request.user)
+    # Allow downvote if user is author or has permission
+    if request.user == tip.author or request.user.has_perm('tips.can_downvote_tips'):
+        if request.user in tip.upvotes.all():
+            tip.upvotes.remove(request.user)
+        if request.user in tip.downvotes.all():
+            tip.downvotes.remove(request.user)
+        else:
+            tip.downvotes.add(request.user)
     return redirect('home')
 
 @login_required
 def delete_tip(request, tip_id):
     tip = Tip.objects.get(id=tip_id)
-    # Check if user is author or has delete permission
     if request.user == tip.author or request.user.has_perm('tips.can_delete_tips'):
         tip.delete()
     return redirect('home')
