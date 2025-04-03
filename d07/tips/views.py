@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm, LoginForm, TipForm
 from .models import Tip
+from accounts.models import CustomUser
 import random
 
 def home(request):
@@ -14,7 +15,7 @@ def home(request):
             if form.is_valid():
                 tip = form.save(commit=False)
                 tip.author = request.user
-                tip.save()
+                tip.save()  # This will trigger reputation update
                 return redirect('home')
         else:
             form = TipForm()
@@ -42,12 +43,12 @@ def upvote_tip(request, tip_id):
         tip.upvotes.remove(request.user)
     else:
         tip.upvotes.add(request.user)
+    tip.save()  # Trigger reputation update
     return redirect('home')
 
 @login_required
 def downvote_tip(request, tip_id):
     tip = Tip.objects.get(id=tip_id)
-    # Allow downvote if user is author or has permission
     if request.user == tip.author or request.user.has_perm('tips.can_downvote_tips'):
         if request.user in tip.upvotes.all():
             tip.upvotes.remove(request.user)
@@ -55,15 +56,17 @@ def downvote_tip(request, tip_id):
             tip.downvotes.remove(request.user)
         else:
             tip.downvotes.add(request.user)
+        tip.save()  # Trigger reputation update
     return redirect('home')
 
 @login_required
 def delete_tip(request, tip_id):
     tip = Tip.objects.get(id=tip_id)
     if request.user == tip.author or request.user.has_perm('tips.can_delete_tips'):
-        tip.delete()
+        tip.delete()  # This will trigger reputation update
     return redirect('home')
 
+# Update forms to use CustomUser
 def register(request):
     if request.user.is_authenticated:
         return redirect('home')

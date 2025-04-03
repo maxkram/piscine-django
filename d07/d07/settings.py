@@ -1,8 +1,9 @@
 import random
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-pe4nv=ctkye)s2cqegq%)^n4vzbq=7o$cil@2svb%e_^!q_%1^'
 
@@ -18,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tips',
+    'accounts',
 ]
 
 MIDDLEWARE = [

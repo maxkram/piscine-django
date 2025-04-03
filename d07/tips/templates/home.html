@@ -2,12 +2,13 @@
 <html>
 <head>
     <title>Life Pro Tips</title>
+    <meta http-equiv="refresh" content="42">
 </head>
 <body>
     <nav>
         <a href="{% url 'home' %}">Life Pro Tips</a>
         {% if user.is_authenticated %}
-            <p>Hello {{ username }}!</p>
+            <p>Hello {{ username }} ({{ user.reputation }})!</p>
             <a href="{% url 'logout' %}">Logout</a>
         {% else %}
             <p>Hello {{ username }}!</p>
@@ -29,7 +30,7 @@
     {% for tip in tips %}
         <div>
             <p>{{ tip.content }}</p>
-            <small>Posted by {{ tip.author.username }} on {{ tip.created_at }}</small>
+            <small>Posted by {{ tip.author.username }} ({{ tip.author.reputation }}) on {{ tip.created_at }}</small>
             {% if user.is_authenticated %}
                 <div>
                     <a href="{% url 'upvote_tip' tip.id %}">Upvote ({{ tip.get_upvote_count }})</a>

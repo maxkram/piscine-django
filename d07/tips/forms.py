@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
+from accounts.models import CustomUser  # Changed import
 from django.contrib.auth import authenticate
 from .models import Tip
 
@@ -8,7 +8,7 @@ class RegistrationForm(forms.ModelForm):
     password_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
 
     class Meta:
-        model = User
+        model = CustomUser  # Changed to CustomUser
         fields = ['username', 'password', 'password_confirm']
 
     def clean(self):
@@ -19,7 +19,7 @@ class RegistrationForm(forms.ModelForm):
         if password and password_confirm and password != password_confirm:
             raise forms.ValidationError("Passwords don't match")
         
-        if User.objects.filter(username=cleaned_data.get("username")).exists():
+        if CustomUser.objects.filter(username=cleaned_data.get("username")).exists():
             raise forms.ValidationError("Username already exists")
         
         return cleaned_data
