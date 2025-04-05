@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Favourites</title></head>
+<body>
+  <h1>Your Favourites</h1>
+  <ul>
+    {% for fav in object_list %}
+    <li><a href="{% url 'articles:detail' fav.article.pk %}">{{ fav.article.title }}</a></li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'articles:logout' %}">Logout</a>
+</body>
+</html>

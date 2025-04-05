@@ -1,0 +1,11 @@
+Add Sample Favorite Data:
+
+Via Django shell (python manage.py shell):
+
+from articles.models import UserFavouriteArticle
+from django.contrib.auth.models import User
+u = User.objects.get(username='user1')
+a1 = Article.objects.get(pk=1)
+a2 = Article.objects.get(pk=2)
+UserFavouriteArticle.objects.create(user=u, article=a1)
+UserFavouriteArticle.objects.create(user=u, article=a2)
