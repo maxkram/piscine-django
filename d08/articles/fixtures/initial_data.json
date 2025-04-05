@@ -1,0 +1,10 @@
+[
+    {"model": "auth.user", "pk": 1, "fields": {"username": "user1", "password": "pbkdf2_sha256$...hashed_password..."}},
+    {"model": "auth.user", "pk": 2, "fields": {"username": "user2", "password": "pbkdf2_sha256$...hashed_password..."}},
+    {"model": "auth.user", "pk": 3, "fields": {"username": "user3", "password": "pbkdf2_sha256$...hashed_password..."}},
+    {"model": "articles.article", "pk": 1, "fields": {"title": "Article 1", "author": 1, "created": "2025-04-04T10:00:00Z", "synopsis": "Lorem ipsum...", "content": "Lorem ipsum..."}},
+    {"model": "articles.article", "pk": 2, "fields": {"title": "Article 2", "author": 1, "created": "2025-04-04T11:00:00Z", "synopsis": "Dolor sit...", "content": "Dolor sit..."}},
+    {"model": "articles.article", "pk": 3, "fields": {"title": "Article 3", "author": 2, "created": "2025-04-04T12:00:00Z", "synopsis": "Amet...", "content": "Amet..."}},
+    {"model": "articles.article", "pk": 4, "fields": {"title": "Article 4", "author": 3, "created": "2025-04-04T13:00:00Z", "synopsis": "Consectetur...", "content": "Consectetur..."}},
+    {"model": "articles.article", "pk": 5, "fields": {"title": "Article 5", "author": 3, "created": "2025-04-04T14:00:00Z", "synopsis": "Adipiscing...", "content": "Adipiscing..."}}
+  ]
