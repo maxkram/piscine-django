@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head><title>{% block title %}{% endblock %}</title></head>
+<body>
+  <nav>
+    <a href="{% url 'articles:home' %}">Home</a> |
+    <a href="{% url 'articles:articles' %}">Last Articles</a> |
+    {% if user.is_authenticated %}
+      <span>Logged as {{ user.username }}</span> |
+      <a href="{% url 'articles:favourites' %}">Favourites</a> |
+      <a href="{% url 'articles:publications' %}">Publications</a> |
+      <a href="{% url 'articles:logout' %}">Logout</a>
+    {% else %}
+      <a href="{% url 'articles:register' %}">Register</a> |
+      <form method="post" action="{% url 'articles:login' %}" style="display:inline;">
+        {% csrf_token %}
+        {{ login_form.as_p }}
+        <button type="submit">Login</button>
+      </form>
+      {% if login_form.errors %}
+        <p>Invalid login</p>
+      {% endif %}
+    {% endif %}
+  </nav>
+  {% block content %}{% endblock %}
+</body>
+</html>

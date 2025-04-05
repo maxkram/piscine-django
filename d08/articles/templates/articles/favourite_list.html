@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head><title>Favourites</title></head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Favourites{% endblock %}
+{% block content %}
   <h1>Your Favourites</h1>
   <ul>
     {% for fav in object_list %}
@@ -9,5 +8,4 @@
     {% endfor %}
   </ul>
   <a href="{% url 'articles:logout' %}">Logout</a>
-</body>
-</html>
+{% endblock %}

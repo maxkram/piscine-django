@@ -5,7 +5,6 @@ from .models import Article, UserFavouriteArticle
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from .forms import RegisterForm, PublishForm
-from django.contrib.auth.forms import AuthenticationForm
 
 class HomeView(RedirectView):
     url = '/articles/'
@@ -13,11 +12,6 @@ class HomeView(RedirectView):
 class ArticleListView(ListView):
     model = Article
     template_name = 'articles/article_list.html'
-    ordering = ['-created']
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['login_form'] = AuthenticationForm()
-        return context
 
 class LoginView(AuthLoginView):
     template_name = 'articles/login.html'

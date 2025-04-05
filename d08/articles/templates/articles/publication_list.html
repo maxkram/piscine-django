@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head><title>Publications</title></head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Publications{% endblock %}
+{% block content %}
   <h1>Your Publications</h1>
   <table border="1">
     <thead>
@@ -23,5 +22,4 @@
     </tbody>
   </table>
   <a href="{% url 'articles:logout' %}">Logout</a>
-</body>
-</html>
+{% endblock %}

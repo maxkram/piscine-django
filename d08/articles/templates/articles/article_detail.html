@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head><title>{{ object.title }}</title></head>
-<body>
+{% extends 'base.html' %}
+{% block title %}{{ object.title }}{% endblock %}
+{% block content %}
   <h1>{{ object.title }}</h1>
   <p>Author: {{ object.author.username }}</p>
   <p>Created: {{ object.created }}</p>
@@ -9,5 +8,4 @@
   <p>Content: {{ object.content }}</p>
   {% include 'articles/add_to_favourite.html' %}
   <a href="{% url 'articles:logout' %}">Logout</a>
-</body>
-</html>
+{% endblock %}

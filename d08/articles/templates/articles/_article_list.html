@@ -1,6 +1,7 @@
-{% extends 'base.html' %}
-{% block title %}Articles{% endblock %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head><title>Articles</title></head>
+<body>
   <h1>Articles</h1>
   <table border="1">
     <thead>
@@ -9,19 +10,19 @@
         <th>Author</th>
         <th>Created</th>
         <th>Synopsis</th>
-        <th>Age</th>
       </tr>
     </thead>
     <tbody>
       {% for article in object_list %}
       <tr>
-        <td><a href="{% url 'articles:detail' article.pk %}">{{ article.title }}</a></td>
+        <td>{{ article.title }}</td>
         <td>{{ article.author.username }}</td>
         <td>{{ article.created }}</td>
-        <td>{{ article.synopsis|truncatechars:20 }}</td>
-        <td>{{ article.created|timesince }}</td>
+        <td>{{ article.synopsis }}</td>
+        <td><a href="{% url 'articles:detail' article.pk %}">{{ article.title }}</a></td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
-{% endblock %}
+</body>
+</html>
