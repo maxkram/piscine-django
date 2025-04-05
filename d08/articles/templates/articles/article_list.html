@@ -1,15 +1,29 @@
 {% extends 'base.html' %}
 {% block title %}Articles{% endblock %}
+<form action="{% url 'set_language' %}" method="post">
+  {% csrf_token %}
+  <input name="next" type="hidden" value="{{ request.path }}">
+  <select name="language" onchange="this.form.submit()">
+    {% get_current_language as LANGUAGE_CODE %}
+    {% get_available_languages as LANGUAGES %}
+    {% for lang in LANGUAGES %}
+      <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+        {{ lang.1 }}
+      </option>
+    {% endfor %}
+  </select>
+</form>
 {% block content %}
-  <h1>Articles</h1>
+  {% load i18n %}
+  <h1>{% trans "Articles" %}</h1>
   <table border="1">
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Created</th>
-        <th>Synopsis</th>
-        <th>Age</th>
+        <th>{% trans "Title" %}</th>
+        <th>{% trans "Author" %}</th>
+        <th>{% trans "Created" %}</th>
+        <th>{% trans "Synopsis" %}</th>
+        <th>{% trans "Age" %}</th>
       </tr>
     </thead>
     <tbody>
