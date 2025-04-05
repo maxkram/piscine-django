@@ -7,6 +7,7 @@
   <p>Created: {{ object.created }}</p>
   <p>Synopsis: {{ object.synopsis }}</p>
   <p>Content: {{ object.content }}</p>
+  {% include 'articles/add_to_favourite.html' %}
   <a href="{% url 'articles:logout' %}">Logout</a>
 </body>
 </html>
