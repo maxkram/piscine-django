@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}Articles{% endblock %}
 <form action="{% url 'set_language' %}" method="post">
   {% csrf_token %}
@@ -14,7 +15,7 @@
   </select>
 </form>
 {% block content %}
-  {% load i18n %}
+
   <h1>{% trans "Articles" %}</h1>
   <table border="1">
     <thead>

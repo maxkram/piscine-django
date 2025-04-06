@@ -12,11 +12,10 @@ class SiteTests(TestCase):
         )
 
     def test_favourites_view_authenticated_only(self):
-        # Use the full path with language prefix
-        response = self.client.get('/en/favourites/')
+        response = self.client.get(reverse('articles:favourites'))
         self.assertEqual(response.status_code, 302)  # Redirect to login
         self.client.login(username='testuser', password='testpass')
-        response = self.client.get('/en/favourites/')
+        response = self.client.get(reverse('articles:favourites'))
         self.assertEqual(response.status_code, 200)
 
     def test_publications_view_authenticated_only(self):

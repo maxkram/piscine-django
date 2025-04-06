@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}Favourites{% endblock %}
 {% block content %}
-  <h1>Your Favourites</h1>
+  <h1>{% trans "Your Favourites" %}</h1>
+  {% if object_list %}
   <ul>
     {% for fav in object_list %}
     <li><a href="{% url 'articles:detail' fav.article.pk %}">{{ fav.article.title }}</a></li>
     {% endfor %}
   </ul>
-  <a href="{% url 'articles:logout' %}">Logout</a>
+  {% else %}
+  <p>{% trans "You have no favourite articles yet." %}</p>
+  {% endif %}
+  <form method="post" action="{% url 'articles:logout' %}">
+    {% csrf_token %}
+    <button type="submit">{% trans "Logout" %}</button>
+  </form>
 {% endblock %}

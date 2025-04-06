@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, RedirectView
 from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView as AuthLogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,6 +7,15 @@ from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from .forms import RegisterForm, PublishForm
 from django.contrib.auth.forms import AuthenticationForm
+
+class PublishView(LoginRequiredMixin, CreateView):
+    form_class = PublishForm
+    template_name = 'articles/publish.html'
+    success_url = reverse_lazy('articles:publications')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 class HomeView(RedirectView):
     url = '/articles/'
@@ -22,6 +32,7 @@ class ArticleListView(ListView):
 class LoginView(AuthLoginView):
     template_name = 'articles/login.html'
     redirect_authenticated_user = True
+    success_url = reverse_lazy('articles:articles')
 
 class PublicationListView(LoginRequiredMixin, ListView):
     model = Article
@@ -47,10 +58,16 @@ class RegisterView(CreateView):
     template_name = 'articles/register.html'
     success_url = reverse_lazy('articles:login')
 
-class PublishView(LoginRequiredMixin, CreateView):
-    form_class = PublishForm
-    template_name = 'articles/publish.html'
-    success_url = reverse_lazy('articles:publications')
+class RegisterView(CreateView):
+    form_class = RegisterForm
+    template_name = 'articles/register.html'
+    success_url = reverse_lazy('articles:login')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('articles:home')  # Redirect authenticated users
+        return super().dispatch(request, *args, **kwargs)
+    
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
@@ -59,9 +76,24 @@ class AddToFavouriteView(LoginRequiredMixin, CreateView):
     model = UserFavouriteArticle
     fields = []
     template_name = 'articles/add_to_favourite.html'
+
     def get_success_url(self):
         return reverse_lazy('articles:detail', kwargs={'pk': self.kwargs['pk']})
+
     def form_valid(self, form):
+        # Check if the favorite already exists
+        if UserFavouriteArticle.objects.filter(
+            user=self.request.user,
+            article=Article.objects.get(pk=self.kwargs['pk'])
+        ).exists():
+            # If it exists, redirect without creating a duplicate
+            return self.get(self.request)
+        # Otherwise, proceed with creation
         form.instance.user = self.request.user
         form.instance.article = Article.objects.get(pk=self.kwargs['pk'])
         return super().form_valid(form)
+    
+class LogoutView(AuthLogoutView):
+    # template_name = 'articles/logout.html'
+    # next_page = '/'
+    next_page = reverse_lazy('articles:home')

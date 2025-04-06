@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}Publications{% endblock %}
 {% block content %}
   <h1>Your Publications</h1>
@@ -21,5 +22,8 @@
       {% endfor %}
     </tbody>
   </table>
-  <a href="{% url 'articles:logout' %}">Logout</a>
+  <form method="post" action="{% url 'articles:logout' %}">
+    {% csrf_token %}
+    <button type="submit">{% trans "Logout" %}</button>
+  </form>
 {% endblock %}

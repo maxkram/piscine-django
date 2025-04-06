@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}Login{% endblock %}
 {% block content %}
   <h1>Login</h1>
@@ -8,6 +9,6 @@
   <form method="post" action="{% url 'articles:login' %}">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Login</button>
+    <button type="submit">{% trans "Login" %}</button>
   </form>
 {% endblock %}
