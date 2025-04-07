@@ -7,9 +7,10 @@
   <p>Created: {{ object.created }}</p>
   <p>Synopsis: {{ object.synopsis }}</p>
   <p>Content: {{ object.content }}</p>
-  {% include 'articles/add_to_favourite.html' %}
-  <form method="post" action="{% url 'articles:logout' %}">
-    {% csrf_token %}
-    <button type="submit">{% trans "Logout" %}</button>
-  </form>
+  {% if user.is_authenticated %}
+    <form method="post" action="{% url 'articles:add_to_favourite' object.pk %}">
+      {% csrf_token %}
+      <button type="submit">{% trans "Add to Favourites" %}</button>
+    </form>
+  {% endif %}
 {% endblock %}
