@@ -1,0 +1,34 @@
+{% load static %}
+<script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{% csrf_token %}
+<div id="login-block" {% if user.is_authenticated %}style="display:none"{% endif %}>
+  <form id="login-form">
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+  </form>
+  <div id="login-errors"></div>
+</div>
+
+<div id="auth-block" {% if not user.is_authenticated %}style="display:none"{% endif %}>
+  Logged as {{ user.username }} <button id="logout-btn">Logout</button>
+</div>
+
+<script>
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+$("#login-form").on("submit", function (e) {
+  e.preventDefault();
+  $.post({
+    url: "{% url 'account:login' %}",
+    headers: {"X-CSRFToken": csrftoken},
+    data: $(this).serialize()
+  })
+  .done(() => { $("#login-block").hide(); $("#auth-block").show(); })
+  .fail(r => { $("#login-errors").text(Object.values(r.responseJSON.errors).join(" ")); });
+});
+
+$("#logout-btn").on("click", function () {
+  $.post({url: "{% url 'account:logout' %}", headers: {"X-CSRFToken": csrftoken}})
+   .done(() => { $("#auth-block").hide(); $("#login-block").show(); });
+});
+</script>

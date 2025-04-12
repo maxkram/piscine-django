@@ -3,3 +3,8 @@ python manage.py createsuperuser
 http://127.0.0.1:8000/admin
 
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+
+daphne -b 0.0.0.0 -p 8000 d09.asgi:application
+
+
+

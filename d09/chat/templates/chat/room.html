@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat - {{ room_name }}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #chat-container {
+            display: flex;
+        }
+        #chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            width: 70%;
+            padding: 10px;
+        }
+        #user-list {
+            height: 300px;
+            border: 1px solid #ccc;
+            width: 30%;
+            padding: 10px;
+            margin-left: 10px;
+        }
+        .message {
+            position: relative;
+            margin: 5px 0;
+        }
+        .message span.timestamp {
+            color: #888;
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+        .message:hover .tooltip {
+            visibility: visible;
+        }
+        .tooltip {
+            visibility: hidden;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 5px;
+            border-radius: 3px;
+            position: absolute;
+            z-index: 1;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ room_name }}</h1>
+    <div id="chat-container">
+        <div id="chat-messages"></div>
+        <div id="user-list"><h3>Connected Users</h3></div>
+    </div>
+    <input id="message-input" type="text" placeholder="Type a message">
+    <button id="send-button">Send</button>
+    <script>
+        const roomName = "{{ room_name|escapejs }}";
+        const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${roomName}/`);
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const $chatMessages = $('#chat-messages');
+            if (data.message) {
+                const isAtBottom = $chatMessages.scrollTop() + $chatMessages.innerHeight() >= $chatMessages[0].scrollHeight;
+                $chatMessages.append(
+                    `<div class="message">${data.message}<span class="timestamp">${data.timestamp}</span>` +
+                    `<span class="tooltip">${data.full_timestamp}</span></div>`
+                );
+                if (isAtBottom) {
+                    $chatMessages.scrollTop($chatMessages[0].scrollHeight);
+                }
+            } else if (data.users) {
+                $('#user-list').html('<h3>Connected Users</h3>' + data.users.map(user => `<p>${user}</p>`).join(''));
+            }
+        };
+
+        chatSocket.onopen = function(e) {
+            console.log('WebSocket connected');
+            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+        };
+
+        chatSocket.onerror = function(e) {
+            console.log('WebSocket error:', e);
+        };
+
+        chatSocket.onclose = function(e) {
+            console.log('WebSocket closed:', e);
+        };
+
+        $('#send-button').click(function() {
+            const message = $('#message-input').val();
+            chatSocket.send(JSON.stringify({'message': message}));
+            $('#message-input').val('');
+        });
+
+        $('#message-input').keypress(function(e) {
+            if (e.which == 13) $('#send-button').click();
+        });
+    </script>
+</body>
+</html>

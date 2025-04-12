@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logged In</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <p>Logged as {{ user.username }}</p>
+    <button id="logout">Logout</button>
+    <script>
+        $('#logout').click(function() {
+            $.post('/account/logout/', function(response) {
+                if (response.status === 'success') location.reload();
+            });
+        });
+    </script>
+</body>
+</html>
